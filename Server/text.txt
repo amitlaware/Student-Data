@@ -1,0 +1,45 @@
+import express from "express";
+const app = express();
+
+import { MongoClient } from "mongodb";
+
+
+const uri = "mongodb://127.0.0.1:27017"; 
+const client = new MongoClient(uri);
+
+async function insertData() {
+  try {
+    await client.connect();
+    const db = client.db("myDatabase");
+    const collection = db.collection("users");
+
+    const newUser = {
+      name: "Amit",
+      email: "amit@example.com",
+      password: "securepassword123",
+    };
+
+    const result = await collection.insertOne(newUser);
+    console.log("Data Inserted:", result.insertedId);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    await client.close();
+  }
+}
+
+insertData();
+
+
+
+
+app.get('/',(req, res)=>{
+    res.send("Hello");
+})
+app.listen(4000,()=>{    
+    console.log("Server is listening on port 4000");
+
+})
+
+
+
